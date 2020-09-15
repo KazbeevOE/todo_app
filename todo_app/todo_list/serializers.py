@@ -14,10 +14,6 @@ class BoardListSerializer(serializers.ModelSerializer):
         model = Board
         fields = ['name', 'description']
 
-    @classmethod
-    def as_view(cls):
-        pass
-
 
 class TaskDetailSerializer(serializers.ModelSerializer):
     class Meta:
