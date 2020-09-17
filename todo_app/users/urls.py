@@ -5,7 +5,7 @@ from .views import CreateUserAPIView, EditUserView, LogoutUserView, authenticate
 urlpatterns = [
     path('create/', CreateUserAPIView.as_view()),
     path('edit/', EditUserView.as_view()),
-    path('authenticate/', authenticate_user),
+    path('login/', authenticate_user),
     path('logout/', LogoutUserView.as_view()),
 
 ]
