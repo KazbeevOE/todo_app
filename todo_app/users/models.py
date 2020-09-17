@@ -4,13 +4,12 @@ from django.contrib.auth.models import (
 from django.db import models
 from django.utils import timezone
 
+from todo_list.models import Organization
+
 
 class UserManager(BaseUserManager):
 
     def _create_user(self, email, password=None, **extra_fields):
-        """
-        Creates and saves a User with the given email,and password.
-        """
         if not email:
             raise ValueError('The given email must be set')
 
@@ -28,7 +27,6 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
     def create_superuser(self, email, password, **extra_fields):
-
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
@@ -36,14 +34,10 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    """
-    An abstract base class implementing a fully featured User model with
-    admin-compliant permissions.
-
-    """
     email = models.EmailField(max_length=40, unique=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
+    organizations = models.ManyToManyField(Organization)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
