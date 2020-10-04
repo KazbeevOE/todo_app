@@ -19,31 +19,19 @@ class EditUserView(generics.RetrieveUpdateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = UserDetailSerializer
 
-    def get(self, request, *args, **kwargs):
-        serializer = self.serializer_class(request.user)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def put(self, request, *args, **kwargs):
-        serializer_data = request.data.get('user', {})
-
-        serializer = UserDetailSerializer(
-            request.user, data=serializer_data, partial=True
-        )
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def get_object(self):
+        return self.request.user
 
 
 class AuthenticateUserView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = UserAuthenticateSerializer
 
-    def post(self, request, organization='', *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         try:
             email = request.data['email']
             password = request.data['password']
+            organization = request.data['organization']
 
             user = User.objects.get(email=email, password=password)
             if user:
